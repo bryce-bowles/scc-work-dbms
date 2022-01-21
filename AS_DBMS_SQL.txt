@@ -1,0 +1,292 @@
+DROP TABLE IF EXISTS division CASCADE;
+DROP TABLE IF EXISTS section CASCADE;
+DROP TABLE IF EXISTS job_title CASCADE;
+DROP TABLE IF EXISTS web_systems  CASCADE;
+DROP TABLE IF EXISTS role CASCADE;
+DROP TABLE IF EXISTS job_title_roles CASCADE;
+DROP TABLE IF EXISTS user_ CASCADE;
+DROP TABLE IF EXISTS user_roles CASCADE;
+DROP TABLE IF EXISTS software CASCADE;
+DROP TABLE IF EXISTS job_title_software CASCADE;
+DROP TABLE IF EXISTS user_software CASCADE;
+DROP TABLE IF EXISTS assets CASCADE;	 
+DROP TABLE IF EXISTS job_title_assets CASCADE;
+DROP TABLE IF EXISTS user_assets CASCADE;
+DROP TABLE IF EXISTS active_directory_group CASCADE;
+DROP TABLE IF EXISTS user_ad_group CASCADE;
+DROP TABLE IF EXISTS job_title_ad_group CASCADE;
+
+
+CREATE TABLE division 
+	(division_id int primary key, 
+	division_name varchar (255));
+
+INSERT INTO division
+	(division_id, division_name)
+	VALUES (1, 'Commissioners Office'),
+	(2, 'Property & Casualty'),
+	(3, 'Life & Health');
+
+CREATE TABLE section
+	(section_id int NOT null primary key, 
+	section_name varchar (255),
+	division_id int NOT null REFERENCES division (division_id)
+	);
+
+INSERT INTO section
+	(section_id, section_name, division_id)
+	VALUES (1, 'Automated Systems', 1),
+	(2, 'All', 1),
+	(3, 'All', 2),
+	(4, 'Consumer Services', 2),
+	(5, 'Market Conduct', 2),
+	(6, 'Rates & Forms', 2),
+	(7, 'All', 3),
+	(8, 'Consumer Services', 3),
+	(9, 'Market Conduct', 3);
+
+
+CREATE TABLE job_title
+	(job_title_id int primary key, 
+	job_title_name varchar (255),
+	section_id int NOT null REFERENCES section (section_id),
+	division_id int NOT null REFERENCES division (division_id));
+	
+INSERT INTO job_title
+	(job_title_id, job_title_name, section_id, division_id)
+	VALUES (1, 'Associate Insurance Market Examiner', 1, 1),
+	(2, 'Chief Insurance Market Examiner', 1, 1),
+	(3, 'Insurance Analyst', 1, 1),
+	(4, 'Insurance Market Examiner', 1, 1),
+	(5, 'Principal Insurance Market Examiner', 1, 1),
+	(6, 'Administrative Supervisor', 2, 1),
+	(7, 'Commissioner', 2, 1),
+	(8, 'Deputy Commissioner', 3, 2),
+	(9, 'Associate Insurance Market Examiner', 4, 2),
+	(10, 'Insurance Market Examiner', 4, 2),
+	(11, 'Manager', 4, 2),
+	(12, 'Office Supervisor', 4, 2),
+	(13, 'Senior Insurance Market Examiner', 4, 2),
+	(14, 'Senior Office Technician', 4, 2),
+	(15, 'Insurance Market Examiner', 5, 2),
+	(16, 'Manager', 5, 2),
+	(17, 'Principal Insurance Market Examiner', 5, 2),
+	(18, 'Senior Insurance Analyst', 5, 2),
+	(19, 'Senior Insurance Market Examiner', 5, 2),
+	(20, 'Senior Office Technician', 5, 2),
+	(21, 'Associate Insurance Market Examiner', 6, 2),
+	(22, 'Chief Insurance Market Examiner', 6, 2),
+	(23, 'Insurance Market Examiner', 6, 2),
+	(24, 'Manager', 6, 2),
+	(25, 'Principal Insurance Market Examiner', 6, 2),
+	(26, 'Principal Office Technician', 6, 2),
+	(27, 'Senior Insurance Market Examiner', 6, 2),
+	(28, 'Deputy Commissioner', 7, 3),
+	(29, 'Insurance Market Examiner', 8, 3),
+	(30, 'Manager', 8, 3),
+	(31, 'Office Supervisor', 8, 3),
+	(32, 'Principal Insurance Market Examiner', 8, 3),
+	(33, 'Senior Insurance Market Examiner', 8, 3),
+	(34, 'Associate Insurance Market Examiner', 9, 3),
+	(35, 'Insurance Analyst', 9, 3),	
+	(36, 'Insurance Market Examiner', 9, 3),
+	(37, 'Manager', 9, 3),	
+	(38, 'Principal Insurance Market Examiner', 9, 3),	
+	(39, 'Principal Office Technician', 9, 3),	
+	(40, 'Senior Insurance Analyst', 9, 3);	
+	
+	
+	
+
+CREATE TABLE web_systems
+	(system_id int primary key, 
+	system_name varchar (255));
+	
+INSERT INTO web_systems
+(system_id, system_name)
+VALUES (1, 'sircon'),
+	(2, 'serff'),
+	(3, 'sharepoint');
+
+	 
+
+CREATE TABLE role
+	(role_id int primary key, 
+	role_name varchar (255),
+	 role_function varchar (255),
+	system_id int NOT null REFERENCES web_systems (system_id));
+
+INSERT INTO role
+(role_id, role_name, system_id)
+VALUES (1, 'sircon beginner', 1),
+	(2, 'sircon intermediate', 1),
+	(3, 'serff beginner', 2),
+	(4, 'serff intermediate', 2),
+	(5, 'sharepoint beginner', 3),
+	(6, 'sharepoint intermediate', 3),
+	(7, 'sharepoint advanced', 3);
+
+	 
+
+CREATE TABLE job_title_roles
+	(role_id int NOT NULL REFERENCES role (role_id),
+	job_title_id int NOT NULL REFERENCES job_title (job_title_id), 
+	PRIMARY KEY (job_title_id, role_id));
+	
+
+INSERT INTO job_title_roles
+	 	(job_title_id, role_id)
+	 VALUES (1, 1), (1, 3),	(1, 5),	(2, 4), (2, 6), (3, 2),	(3, 4),	(3, 6),	(4, 2),	(4, 4),	(4, 7),	(5, 2),	(5, 4),	(5, 7),	
+	 (6, 1), (6, 3),	(7, 2),	(7, 4),	(7, 7),	(8, 2),	(8, 4),	(8, 7),	(9, 1), (9, 3),	(9, 5), (10, 2), (10, 4), (10, 7), 
+	 (11, 2), (11, 4), (11, 7),	(12, 1), (12, 3), (12, 5),(13, 2), (13, 4), (13, 7), (14, 2), (14, 4), (14, 7),  
+	 (15, 2), (15, 4), (15, 7), (16, 2), (16, 4), (16, 7), (17, 2), (17, 4), (17, 7), (18, 2), (18, 4), (18, 7), 
+	 (19, 2), (19, 4), (19, 7), (20, 2), (20, 4), (20, 7), (21, 1), (21, 3), (21, 5),(22, 2), (22, 4), (22, 7), (23, 2), (23, 4), (23, 7), 
+	(24, 2), (24, 4), (24, 7), (25, 2), (25, 4), (25, 7), (26, 2), (26, 4), (26, 7), (27, 2), (27, 4), (27, 7), 
+	(28, 2), (28, 4), (28, 7),(29, 2), (29, 4), (29, 7),(30, 2), (30, 4), (30, 7), (31, 1), (31, 3), (31, 5), 
+	(32, 2), (32, 4), (32, 7), (33, 2), (33, 4), (33, 7), (34, 1), (34, 3), (34, 5), (35, 2), (35, 4), (35, 7),
+	(36, 2), (36, 4), (36, 7),(37, 2), (37, 4), (37, 7),(38, 2), (38, 4), (38, 7), (39, 2), (39, 4), (39, 7),
+	(40, 2), (40, 4), (40, 7);
+	 
+
+CREATE TABLE user_
+	(position_number int primary key, 
+	user_first_name varchar (255),
+	user_last_name varchar (255),
+	division_id int NOT NULL REFERENCES division (division_id), 
+	section_id int NOT NULL REFERENCES section (section_id), 
+	job_title_id int NOT NULL REFERENCES job_title (job_title_id), 
+	user_supervisor_fname varchar (255),
+	user_supervisor_lname varchar (255),
+	user_start_date date, 
+	user_cube_number varchar (10),
+	user_phone_number varchar (20));
+
+INSERT INTO user_
+	 (position_number, user_first_name, user_last_name,	division_id , section_id, job_title_id, user_supervisor_fname, user_supervisor_lname, user_start_date, user_cube_number, user_phone_number)
+	 VALUES (231.01, 'Bryce', 'Bowles', 1, 1, 4, 'Trish', 'Todd', '06/15/2017', '3B15', '1-9078');
+	 
+
+
+CREATE TABLE user_roles
+	(position_number int NOT NULL REFERENCES user_ (position_number),
+	role_id int NOT NULL REFERENCES role (role_id),
+	PRIMARY KEY (position_number, role_id));
+
+INSERT INTO user_roles
+	 (position_number, role_id)
+	 VALUES (231.01, 2), (231.01, 4), (231.01, 7); 
+	
+
+CREATE TABLE software
+	(software_id int primary key, 
+	software_name varchar (255),
+	version varchar (255),
+	SME varchar (255));
+
+INSERT INTO software
+	 	(software_id, software_name, version, SME)
+	 VALUES (1, 'Adobe', 'Pro', 'Kelvin'),
+	 (2, 'Adobe', 'Reader', 'Kelvin'),
+	 (3, 'TeamMate', '12.5', 'Bryce');
+
+	 
+
+CREATE TABLE job_title_software
+	(software_id int NOT NULL REFERENCES software (software_id), 
+	job_title_id int NOT NULL REFERENCES job_title (job_title_id), 
+	PRIMARY KEY ( job_title_id, software_id));
+	 
+INSERT INTO job_title_software
+	(software_id, job_title_id)
+	 VALUES (1, 4), (3, 4);
+
+
+CREATE TABLE user_software
+	(software_id int NOT NULL REFERENCES software (software_id), 
+	position_number int NOT NULL REFERENCES user_ (position_number), 
+	PRIMARY KEY (software_id, position_number));
+
+INSERT INTO user_software
+	(software_id, position_number)
+	 VALUES (1, 231.01), (3, 231.01);
+	 
+CREATE TABLE assets
+	(asset_serial_number varchar (255) primary key, 
+	asset_name varchar (255),
+	asset_type varchar (255),
+	make_model varchar (255));
+
+INSERT INTO assets
+	 (asset_serial_number,	asset_name, asset_type,	make_model)
+	 VALUES ('CN0T0RN67426163Q12EL', 'Monitor', 'N/A', 'Dell P2214');
+	 
+	 
+create TABLE job_title_assets
+	(asset_name varchar (255) REFERENCES assets (asset_serial_number) UNIQUE, 
+	job_title_id int NOT NULL REFERENCES job_title (job_title_id), 
+	PRIMARY KEY (asset_name, job_title_id ));
+
+INSERT INTO job_title_assets
+	(job_title_id, asset_name)
+	 VALUES (4, 'CN0T0RN67426163Q12EL');
+	 
+
+CREATE TABLE user_assets
+	(position_number int REFERENCES user_ (position_number), 
+	asset_serial_number varchar (255) REFERENCES assets (asset_serial_number), 
+	PRIMARY KEY (position_number, asset_serial_number));
+	 
+INSERT INTO user_assets
+	 (position_number, asset_serial_number)
+	 VALUES (231.01, 'CN0T0RN67426163Q12EL');
+
+
+CREATE TABLE active_directory_group
+	(ad_name varchar (255) PRIMARY KEY, 
+	ad_type varchar (255), 
+	ad_description varchar (255));
+
+INSERT INTO active_directory_group
+	 (ad_name, ad_type, ad_description)
+	 VALUES ('AUTOSYS', 'Network Folder', '\\scc6\BOIAPPS\boi\apps\AUTOSYS');
+	 
+
+CREATE TABLE user_ad_group
+	(position_number int REFERENCES user_ (position_number), 
+	ad_name varchar (255) REFERENCES active_directory_group (ad_name), 
+	PRIMARY KEY (position_number, ad_name));
+	
+INSERT INTO user_ad_group
+	(position_number, ad_name )
+	VALUES (231.01, 'AUTOSYS');
+
+CREATE TABLE job_title_ad_group
+	(ad_name varchar (255) REFERENCES active_directory_group (ad_name), 
+	job_title_id int NOT NULL REFERENCES job_title (job_title_id), 
+	PRIMARY KEY (job_title_id, ad_name));
+	
+INSERT INTO job_title_ad_group
+	(job_title_id, ad_name) 
+	VALUES (1, 'AUTOSYS'), (2, 'AUTOSYS'), (3, 'AUTOSYS'), (4, 'AUTOSYS'), (5, 'AUTOSYS');
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
